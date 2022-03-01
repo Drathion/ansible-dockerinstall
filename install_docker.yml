@@ -1,0 +1,21 @@
+---
+
+- hosts: docker
+  become: yes
+  vars:
+    packages:
+      - "docker-ce"
+      - "docker-ce-cli"
+      - "containerd.io"
+  tasks:
+    - name: "Update Yum Cache"
+      yum:
+        update_cache: yes
+    - name: "Add Docker repo"
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+    - name: "Install packages"
+      yum:
+        name: "{{ packages }}"
+        state: latest
